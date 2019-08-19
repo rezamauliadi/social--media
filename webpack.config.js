@@ -4,8 +4,15 @@ const HtmlWebPackPlugin = require("html-webpack-plugin");
 module.exports = {
   target: "web",
   devtool: "inline-source-map",
+  entry: "./src/index.js",
+  output: {
+    path: path.resolve(__dirname, "dist"),
+    filename: "index_bundle.js",
+    publicPath: "/"
+  },
   devServer: {
-    port: 9000
+    port: 9000,
+    historyApiFallback: true
   },
   module: {
     rules: [
