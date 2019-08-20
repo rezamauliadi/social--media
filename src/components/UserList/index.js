@@ -10,7 +10,7 @@ const UserList = ({ users, url }) => {
   const userCard = user => (
     <Card
       as={Link}
-      to={`${url}/${user.id}`}
+      to={`${url}/${user.id}/posts`}
       key={user.id}
       style={{ width: "198px" }}
     >

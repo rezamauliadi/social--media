@@ -17,7 +17,7 @@ const Post = ({ post, user }) => {
           <Feed.Content>
             <Feed.Date>1 day ago</Feed.Date>
             <Feed.Summary>
-              <Link to={`users/${user.id}`}>{user.name}</Link> posted!
+              <Link to={`users/${user.id}/posts`}>{user.name}</Link> posted!
             </Feed.Summary>
             <Feed.Extra text>{post.body}</Feed.Extra>
           </Feed.Content>

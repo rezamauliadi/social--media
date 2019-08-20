@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 
 import MenuBar from "src/components/MenuBar";
-import HomeFeed from "src/components/HomeFeed";
+import Post from "src/components/Post";
 
 import { Container, Dimmer, Header, Loader, Segment } from "semantic-ui-react";
 
@@ -30,6 +30,8 @@ class Home extends Component {
     this.setState({ loading: false });
   }
 
+  getUser = (post, users) => users.find(user => user.id === post.userId);
+
   homeFeeds = () => {
     if (this.state.loading) {
       return (
@@ -39,7 +41,11 @@ class Home extends Component {
       );
     } else {
       return this.state.posts.map((post, index) => (
-        <HomeFeed key={index} post={post} users={this.state.users} />
+        <Post
+          key={index}
+          post={post}
+          user={this.getUser(post, this.state.users)}
+        />
       ));
     }
   };
@@ -51,7 +57,7 @@ class Home extends Component {
 
         <div style={{ background: "rgba(0, 0, 0, 0.08)", padding: "30px 0" }}>
           <Container text>
-            <Header as="h2">Home Feed</Header>
+            <Header as="h2">Your Feed</Header>
             <Segment>
               <div style={{ padding: "24px" }}>{this.homeFeeds()}</div>
             </Segment>

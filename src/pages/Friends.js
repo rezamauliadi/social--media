@@ -43,7 +43,7 @@ class Friends extends Component {
 
         <div style={{ background: "rgba(0, 0, 0, 0.08)", padding: "30px 0" }}>
           <Container text>
-            <Header as="h2">Friends</Header>
+            <Header as="h2">Your Friends</Header>
             <Segment>
               <div style={{ padding: "24px" }}>{this.userList()}</div>
             </Segment>
