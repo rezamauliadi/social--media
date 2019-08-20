@@ -2,6 +2,7 @@ import React, { Component } from "react";
 
 import MenuBar from "src/components/MenuBar";
 import Post from "src/components/Post";
+import PostForm from "src/components/PostForm";
 
 import { Container, Dimmer, Header, Loader, Segment } from "semantic-ui-react";
 
@@ -30,22 +31,25 @@ class Home extends Component {
     this.setState({ loading: false });
   }
 
+  pushNewPost = newPost => {
+    const newPostList = [newPost, ...this.state.posts];
+    this.setState({ posts: newPostList });
+  };
+
   getUser = (post, users) => users.find(user => user.id === post.userId);
 
   homeFeeds = () => {
-    if (this.state.loading) {
+    const { loading, posts, users } = this.state;
+
+    if (loading) {
       return (
         <Dimmer active>
           <Loader />
         </Dimmer>
       );
     } else {
-      return this.state.posts.map((post, index) => (
-        <Post
-          key={index}
-          post={post}
-          user={this.getUser(post, this.state.users)}
-        />
+      return posts.map(post => (
+        <Post key={post.id} post={post} user={this.getUser(post, users)} />
       ));
     }
   };
@@ -59,6 +63,7 @@ class Home extends Component {
           <Container text>
             <Header as="h2">Your Feed</Header>
             <Segment>
+              <PostForm pushNewPost={this.pushNewPost} />
               <div style={{ padding: "24px" }}>{this.homeFeeds()}</div>
             </Segment>
           </Container>

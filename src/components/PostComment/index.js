@@ -17,7 +17,9 @@ const PostComment = ({ comment }) => {
           <div>1 day ago</div>
         </Comment.Metadata>
         <Comment.Text>
-          <div style={{ fontWeight: "bold" }}>{comment.name}</div>
+          <div style={{ fontWeight: "bold", fontStyle: "italic" }}>
+            {comment.name}
+          </div>
           {comment.body}
         </Comment.Text>
       </Comment.Content>

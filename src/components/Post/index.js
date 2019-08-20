@@ -18,7 +18,8 @@ class Post extends Component {
     comments: [],
     showComments: false,
     buttonText: "Show Comments",
-    loading: false
+    loading: false,
+    hasFetch: false
   };
 
   getComments = async id => {
@@ -29,17 +30,20 @@ class Post extends Component {
   };
 
   toggleComments = async id => {
-    if (!this.state.showComments) {
-      if (this.state.comments.length) {
+    const { comments, hasFetch, showComments } = this.state;
+
+    if (!showComments) {
+      if (comments.length || (!comments.length && hasFetch)) {
         this.setState({ showComments: true, buttonText: "Hide Comments" });
       } else {
         this.setState({ loading: true });
         const comments = await this.getComments(id);
         this.setState({
           comments,
-          showComments: true,
           buttonText: "Hide Comments",
-          loading: false
+          loading: false,
+          hasFetch: true,
+          showComments: true
         });
       }
     } else {
@@ -61,10 +65,14 @@ class Post extends Component {
   };
 
   renderComments = () => {
-    if (this.state.comments.length && this.state.showComments) {
-      return this.state.comments.map((comment, index) => (
+    const { comments, hasFetch, showComments } = this.state;
+
+    if (comments.length && showComments) {
+      return comments.map((comment, index) => (
         <PostComment comment={comment} key={index} />
       ));
+    } else if (!comments.length && hasFetch && showComments) {
+      return <div>No comment...</div>;
     } else {
       return <div />;
     }
@@ -79,14 +87,19 @@ class Post extends Component {
               <Image src={getAvatar(this.props.user.id)} />
             </Feed.Label>
             <Feed.Content>
-              <Feed.Date>1 day ago</Feed.Date>
               <Feed.Summary>
-                <Link to={`users/${this.props.user.id}/posts`}>
+                <Feed.User as={Link} to={`users/${this.props.user.id}/posts`}>
                   {this.props.user.name}
-                </Link>{" "}
+                </Feed.User>{" "}
                 posted!
+                <Feed.Date>1 day ago</Feed.Date>
               </Feed.Summary>
-              <Feed.Extra text>{this.props.post.body}</Feed.Extra>
+              <Feed.Extra text>
+                <div style={{ fontWeight: "bold", fontStyle: "italic" }}>
+                  {this.props.post.title}
+                </div>
+                {this.props.post.body}
+              </Feed.Extra>
             </Feed.Content>
           </Feed.Event>
         </Feed>

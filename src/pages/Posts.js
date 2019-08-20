@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 
-import { Dimmer, Header, Loader } from "semantic-ui-react";
+import { Dimmer, Divider, Header, Loader } from "semantic-ui-react";
 import Post from "src/components/Post";
+import PostForm from "src/components/PostForm";
 
 class Posts extends Component {
   state = {
@@ -21,8 +22,16 @@ class Posts extends Component {
     this.setState({ loading: false });
   }
 
+  pushNewPost = newPost => {
+    const newPostList = [newPost, ...this.state.posts];
+    this.setState({ posts: newPostList });
+  };
+
   renderUserPosts = () => {
-    if (this.state.loading) {
+    const { loading, posts } = this.state;
+    const { user } = this.props;
+
+    if (loading) {
       return (
         <Dimmer active>
           <Loader />
@@ -31,11 +40,13 @@ class Posts extends Component {
     } else {
       return (
         <div style={{ padding: "12px 24px" }}>
-          <Header as="h2" style={{ marginBottom: "30px" }}>
-            {this.props.user.name}'s posts
-          </Header>
-          {this.state.posts.map(post => (
-            <Post key={post.id} post={post} user={this.props.user} />
+          <Header as="h2">{user.name}'s posts</Header>
+
+          <PostForm pushNewPost={this.pushNewPost} />
+          <Divider style={{ margin: "30px 0" }} />
+
+          {posts.map(post => (
+            <Post key={post.id} post={post} user={user} />
           ))}
         </div>
       );
