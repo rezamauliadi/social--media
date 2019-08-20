@@ -47,7 +47,7 @@ class User extends Component {
               <Item.Content>
                 <Item.Header as="a">{this.state.user.name}</Item.Header>
                 <Item.Meta>{this.state.user.username}</Item.Meta>
-                <Item.Extra>
+                <Item.Description>
                   <Label as="a">
                     <Icon name="mail" />
                     {this.state.user.email.toLowerCase()}
@@ -56,28 +56,18 @@ class User extends Component {
                     <Icon name="map pin" />
                     {this.state.user.address.city}
                   </Label>
-                  <Button
-                    as={Link}
-                    to={`${this.props.match.url}/albums`}
-                    primary
-                    floated="right"
-                  >
-                    <Icon name="image" />
-                    Albums
-                  </Button>
-                  <Button
-                    as={Link}
-                    to={`${this.props.match.url}/posts`}
-                    primary
-                    floated="right"
-                  >
-                    <Icon name="chat" />
-                    Posts
-                  </Button>
-                </Item.Extra>
+                </Item.Description>
               </Item.Content>
             </Item>
           </Item.Group>
+          <Button as={Link} to={`${this.props.match.url}/posts`} primary>
+            <Icon name="chat" />
+            Posts
+          </Button>
+          <Button as={Link} to={`${this.props.match.url}/albums`} primary>
+            <Icon name="image" />
+            Albums
+          </Button>
         </div>
       </Segment>
     );
