@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
 
-import { Card, Image, Loader } from "semantic-ui-react";
+import { Dimmer, Header, Loader } from "semantic-ui-react";
+import PhotoCard from "src/components/PhotoCard";
 
 class Albums extends Component {
   state = {
@@ -13,7 +13,13 @@ class Albums extends Component {
     const url = `http://jsonplaceholder.typicode.com/albums?userId=${id}`;
     const response = await fetch(url);
     const data = await response.json();
-    this.setState({ albums: data });
+    const newData = data.map(d => {
+      const album = d;
+      album.thumbnailUrl = "/images/placeholder.png";
+      album.url = `${this.props.userUrl}/photos/${album.id}`;
+      return album;
+    });
+    this.setState({ albums: newData });
   }
 
   async componentDidMount() {
@@ -21,45 +27,27 @@ class Albums extends Component {
     this.setState({ loading: false });
   }
 
-  userPosts = () => {
-    const cardTitleStyle = {
-      width: "140px",
-      whiteSpace: "nowrap",
-      overflow: "hidden",
-      textOverflow: "ellipsis"
-    };
-
-    return (
-      <div style={{ padding: "12px 24px" }}>
-        <Card.Group itemsPerRow={3}>
-          {this.state.albums.map(album => (
-            <Card
-              key={album.id}
-              as={Link}
-              to={`${this.props.url}/photos/${album.id}`}
-              color="blue"
-            >
-              <Image src="/images/placeholder.png" wrapped ui={false} />
-              <Card.Content>
-                <Card.Header style={cardTitleStyle}>{album.title}</Card.Header>
-              </Card.Content>
-            </Card>
-          ))}
-        </Card.Group>
-      </div>
-    );
-  };
-
-  renderUserPosts = () => {
+  renderUserAlbums = () => {
     if (this.state.loading) {
-      return <Loader />;
+      return (
+        <Dimmer active>
+          <Loader />
+        </Dimmer>
+      );
     } else {
-      return <div>{this.userPosts()}</div>;
+      return (
+        <div style={{ padding: "12px 24px" }}>
+          <Header as="h2" style={{ marginBottom: "30px" }}>
+            {this.props.user.name}'s albums
+          </Header>
+          <PhotoCard items={this.state.albums} isAlbum={true} />
+        </div>
+      );
     }
   };
 
   render() {
-    return this.renderUserPosts();
+    return this.renderUserAlbums();
   }
 }
 

@@ -2,18 +2,19 @@ import React, { Component } from "react";
 import { Route, Link } from "react-router-dom";
 
 import {
+  Button,
   Container,
   Dimmer,
   Icon,
   Item,
   Label,
   Loader,
-  Menu,
   Segment
 } from "semantic-ui-react";
 import MenuBar from "src/components/MenuBar";
 import Posts from "./Posts";
 import Albums from "./Albums";
+import Photos from "./Photos";
 
 import getAvatar from "src/helpers/avatar-helper";
 
@@ -43,7 +44,6 @@ class User extends Component {
           <Item.Group>
             <Item>
               <Item.Image size="tiny" src={getAvatar(this.state.user.id)} />
-
               <Item.Content>
                 <Item.Header as="a">{this.state.user.name}</Item.Header>
                 <Item.Meta>{this.state.user.username}</Item.Meta>
@@ -56,32 +56,30 @@ class User extends Component {
                     <Icon name="map pin" />
                     {this.state.user.address.city}
                   </Label>
+                  <Button
+                    as={Link}
+                    to={`${this.props.match.url}/albums`}
+                    primary
+                    floated="right"
+                  >
+                    <Icon name="image" />
+                    Albums
+                  </Button>
+                  <Button
+                    as={Link}
+                    to={`${this.props.match.url}/posts`}
+                    primary
+                    floated="right"
+                  >
+                    <Icon name="chat" />
+                    Posts
+                  </Button>
                 </Item.Extra>
               </Item.Content>
             </Item>
           </Item.Group>
         </div>
       </Segment>
-    );
-  };
-
-  userMenus = () => {
-    const menus = [
-      { route: `${this.props.match.url}/posts`, name: "Posts", key: "posts" },
-      { route: `${this.props.match.url}/albums`, name: "Albums", key: "albums" }
-    ];
-
-    return (
-      <Menu pointing secondary>
-        {menus.map(menu => (
-          <Menu.Item
-            as={Link}
-            to={menu.route}
-            key={menu.key}
-            name={menu.name}
-          />
-        ))}
-      </Menu>
     );
   };
 
@@ -95,14 +93,13 @@ class User extends Component {
     } else {
       const props = {
         user: this.state.user,
-        url: this.props.match.url
+        userUrl: this.props.match.url
       };
       return (
         <Container text>
           {this.userInfoSegment()}
 
           <Segment>
-            {this.userMenus()}
             <div style={{ padding: "12px 24px" }}>
               <Route
                 path="/users/:userId/posts"
@@ -112,6 +109,7 @@ class User extends Component {
                 path="/users/:userId/albums"
                 render={() => <Albums {...props} />}
               />
+              <Route path="/users/:userId/photos/:albumId" component={Photos} />
             </div>
           </Segment>
         </Container>

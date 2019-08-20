@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import { Loader } from "semantic-ui-react";
+import { Dimmer, Header, Loader } from "semantic-ui-react";
 import Post from "src/components/Post";
 
 class Posts extends Component {
@@ -21,21 +21,24 @@ class Posts extends Component {
     this.setState({ loading: false });
   }
 
-  userPosts = () => {
-    return (
-      <div style={{ padding: "12px 24px" }}>
-        {this.state.posts.map(post => (
-          <Post key={post.id} post={post} user={this.props.user} />
-        ))}
-      </div>
-    );
-  };
-
   renderUserPosts = () => {
     if (this.state.loading) {
-      return <Loader />;
+      return (
+        <Dimmer active>
+          <Loader />
+        </Dimmer>
+      );
     } else {
-      return <div>{this.userPosts()}</div>;
+      return (
+        <div style={{ padding: "12px 24px" }}>
+          <Header as="h2" style={{ marginBottom: "30px" }}>
+            {this.props.user.name}'s posts
+          </Header>
+          {this.state.posts.map(post => (
+            <Post key={post.id} post={post} user={this.props.user} />
+          ))}
+        </div>
+      );
     }
   };
 
