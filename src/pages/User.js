@@ -1,24 +1,25 @@
 import React, { Component } from "react";
-
-import MenuBar from "src/components/MenuBar";
+import { Route, Link } from "react-router-dom";
 
 import {
   Container,
   Dimmer,
+  Icon,
   Item,
+  Label,
   Loader,
   Menu,
   Segment
 } from "semantic-ui-react";
-
-import Post from "src/components/Post";
+import MenuBar from "src/components/MenuBar";
+import Posts from "./Posts";
+import Albums from "./Albums";
 
 import getAvatar from "src/helpers/avatar-helper";
 
 class User extends Component {
   state = {
     user: {},
-    posts: [],
     loading: true
   };
 
@@ -29,55 +30,62 @@ class User extends Component {
     this.setState({ user: data });
   }
 
-  async getUserPosts(id) {
-    const url = `http://jsonplaceholder.typicode.com/posts?userId=${id}`;
-    const response = await fetch(url);
-    const data = await response.json();
-    this.setState({ posts: data });
-  }
-
   async componentDidMount() {
     const userId = this.props.match.params.userId;
     await this.getUser(userId);
-    await this.getUserPosts(userId);
     this.setState({ loading: false });
   }
 
-  userPosts = () => {
+  userInfoSegment = () => {
     return (
-      <Container text>
-        <Segment>
-          <div style={{ padding: "12px 24px" }}>
-            <Item.Group>
-              <Item>
-                <Item.Image size="tiny" src={getAvatar(this.state.user.id)} />
+      <Segment>
+        <div style={{ padding: "12px 24px" }}>
+          <Item.Group>
+            <Item>
+              <Item.Image size="tiny" src={getAvatar(this.state.user.id)} />
 
-                <Item.Content>
-                  <Item.Header as="a">{this.state.user.name}</Item.Header>
-                  <Item.Meta>{this.state.user.username}</Item.Meta>
-                  <Item.Extra>{this.state.user.email}</Item.Extra>
-                </Item.Content>
-              </Item>
-            </Item.Group>
-          </div>
-        </Segment>
-
-        <Segment>
-          <Menu pointing secondary>
-            <Menu.Item name="posts" />
-            <Menu.Item name="albums" />
-          </Menu>
-          <div style={{ padding: "12px 24px" }}>
-            {this.state.posts.map(post => (
-              <Post key={post.id} post={post} user={this.state.user} />
-            ))}
-          </div>
-        </Segment>
-      </Container>
+              <Item.Content>
+                <Item.Header as="a">{this.state.user.name}</Item.Header>
+                <Item.Meta>{this.state.user.username}</Item.Meta>
+                <Item.Extra>
+                  <Label as="a">
+                    <Icon name="mail" />
+                    {this.state.user.email.toLowerCase()}
+                  </Label>
+                  <Label as="a">
+                    <Icon name="map pin" />
+                    {this.state.user.address.city}
+                  </Label>
+                </Item.Extra>
+              </Item.Content>
+            </Item>
+          </Item.Group>
+        </div>
+      </Segment>
     );
   };
 
-  thisUser = () => {
+  userMenus = () => {
+    const menus = [
+      { route: `${this.props.match.url}/posts`, name: "Posts", key: "posts" },
+      { route: `${this.props.match.url}/albums`, name: "Albums", key: "albums" }
+    ];
+
+    return (
+      <Menu pointing secondary>
+        {menus.map(menu => (
+          <Menu.Item
+            as={Link}
+            to={menu.route}
+            key={menu.key}
+            name={menu.name}
+          />
+        ))}
+      </Menu>
+    );
+  };
+
+  renderUserPage = () => {
     if (this.state.loading) {
       return (
         <Dimmer active>
@@ -85,7 +93,29 @@ class User extends Component {
         </Dimmer>
       );
     } else {
-      return <div>{this.userPosts()}</div>;
+      const props = {
+        user: this.state.user,
+        url: this.props.match.url
+      };
+      return (
+        <Container text>
+          {this.userInfoSegment()}
+
+          <Segment>
+            {this.userMenus()}
+            <div style={{ padding: "12px 24px" }}>
+              <Route
+                path="/users/:userId/posts"
+                render={() => <Posts {...props} />}
+              />
+              <Route
+                path="/users/:userId/albums"
+                render={() => <Albums {...props} />}
+              />
+            </div>
+          </Segment>
+        </Container>
+      );
     }
   };
 
@@ -95,7 +125,7 @@ class User extends Component {
         <MenuBar />
 
         <div style={{ background: "rgba(0, 0, 0, 0.08)", padding: "30px 0" }}>
-          {this.thisUser()}
+          {this.renderUserPage()}
         </div>
       </div>
     );
