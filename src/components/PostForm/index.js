@@ -28,7 +28,7 @@ class PostForm extends Component {
       }
     });
     const createdPost = await response.json();
-    this.props.pushNewPost(createdPost);
+    this.props.onSubmitPost(createdPost);
     this.setState({ loading: false });
   }
 

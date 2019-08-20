@@ -36,6 +36,14 @@ class Home extends Component {
     this.setState({ posts: newPostList });
   };
 
+  removePost = postId => {
+    const { posts } = this.state;
+    const postIndex = posts.findIndex(post => post.id === postId);
+    const newPostList = [...posts];
+    newPostList.splice(postIndex, 1);
+    this.setState({ posts: newPostList });
+  };
+
   getUser = (post, users) => users.find(user => user.id === post.userId);
 
   homeFeeds = () => {
@@ -49,7 +57,12 @@ class Home extends Component {
       );
     } else {
       return posts.map(post => (
-        <Post key={post.id} post={post} user={this.getUser(post, users)} />
+        <Post
+          key={post.id}
+          post={post}
+          user={this.getUser(post, users)}
+          onDeletePost={this.removePost}
+        />
       ));
     }
   };
@@ -63,7 +76,7 @@ class Home extends Component {
           <Container text>
             <Header as="h2">Your Feed</Header>
             <Segment>
-              <PostForm pushNewPost={this.pushNewPost} />
+              <PostForm onSubmitPost={this.pushNewPost} />
               <div style={{ padding: "24px" }}>{this.homeFeeds()}</div>
             </Segment>
           </Container>

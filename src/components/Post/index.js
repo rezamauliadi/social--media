@@ -18,8 +18,23 @@ class Post extends Component {
     comments: [],
     showComments: false,
     buttonText: "Show Comments",
-    loading: false,
-    hasFetch: false
+    fetchingComments: false,
+    deletingPost: false,
+    hasFetch: false,
+    opacity: "1"
+  };
+
+  deletePost = async id => {
+    this.setState({ deletingPost: true });
+    const url = `http://jsonplaceholder.typicode.com/posts/${id}`;
+    const response = await fetch(url, { method: "DELETE" });
+
+    if (response.status === 200) {
+      this.setState({ opacity: "0", deletePost: false });
+      setTimeout(() => {
+        this.props.onDeletePost(id);
+      }, 500);
+    }
   };
 
   getComments = async id => {
@@ -36,12 +51,12 @@ class Post extends Component {
       if (comments.length || (!comments.length && hasFetch)) {
         this.setState({ showComments: true, buttonText: "Hide Comments" });
       } else {
-        this.setState({ loading: true });
+        this.setState({ fetchingComments: true });
         const comments = await this.getComments(id);
         this.setState({
           comments,
           buttonText: "Hide Comments",
-          loading: false,
+          fetchingComments: false,
           hasFetch: true,
           showComments: true
         });
@@ -52,7 +67,7 @@ class Post extends Component {
   };
 
   buttonContent = () => {
-    if (this.state.loading) {
+    if (this.state.fetchingComments) {
       return (
         <div>
           <Loader style={{ marginRight: "4px" }} size="mini" active inline />{" "}
@@ -79,26 +94,29 @@ class Post extends Component {
   };
 
   render() {
+    const { deletingPost, opacity } = this.state;
+    const { post, user } = this.props;
+
     return (
-      <div>
+      <div style={{ opacity, transition: "opacity 500ms linear" }}>
         <Feed>
           <Feed.Event>
             <Feed.Label>
-              <Image src={getAvatar(this.props.user.id)} />
+              <Image src={getAvatar(user.id)} />
             </Feed.Label>
             <Feed.Content>
               <Feed.Summary>
-                <Feed.User as={Link} to={`users/${this.props.user.id}/posts`}>
-                  {this.props.user.name}
+                <Feed.User as={Link} to={`users/${user.id}/posts`}>
+                  {user.name}
                 </Feed.User>{" "}
                 posted!
                 <Feed.Date>1 day ago</Feed.Date>
               </Feed.Summary>
               <Feed.Extra text>
                 <div style={{ fontWeight: "bold", fontStyle: "italic" }}>
-                  {this.props.post.title}
+                  {post.title}
                 </div>
-                {this.props.post.body}
+                {post.body}
               </Feed.Extra>
             </Feed.Content>
           </Feed.Event>
@@ -106,10 +124,18 @@ class Post extends Component {
         <Button
           size="mini"
           style={{ marginLeft: "50px" }}
-          onClick={() => this.toggleComments(this.props.post.id)}
+          onClick={() => this.toggleComments(post.id)}
         >
           {this.buttonContent()}
         </Button>
+        <Button
+          size="tiny"
+          color="red"
+          floated="right"
+          icon="trash"
+          loading={deletingPost}
+          onClick={() => this.deletePost(post.id)}
+        />
 
         <Comment.Group style={{ marginLeft: "60px" }}>
           {this.renderComments()}
