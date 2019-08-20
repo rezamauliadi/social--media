@@ -2,6 +2,7 @@ import React, { Component } from "react";
 
 import { Button, Form, Message } from "semantic-ui-react";
 
+import API from "src/api";
 class PostForm extends Component {
   state = {
     userId: 1,
@@ -11,24 +12,18 @@ class PostForm extends Component {
     loading: false
   };
 
-  getFetchSetting = () => {
-    let payload = {};
-    let url = "";
-
+  getPayload = type => {
     const { body, title, userId } = this.state;
-    if (this.props.type === "posts") {
-      payload = { title, body, userId };
-      url = "https://jsonplaceholder.typicode.com/posts";
-    } else if (this.props.type === "comments") {
-      payload = {
-        body,
-        name: title,
-        postId: this.props.postId,
-        email: "user@email.com"
-      };
-      url = "https://jsonplaceholder.typicode.com/comments";
+
+    if (type === "posts") {
+      return { title, body, userId };
     }
-    return { payload, url };
+    return {
+      body,
+      name: title,
+      postId: this.props.postId,
+      email: "user@email.com"
+    };
   };
 
   submitItem = async () => {
@@ -40,17 +35,12 @@ class PostForm extends Component {
       return;
     }
 
-    const { payload, url } = this.getFetchSetting();
-    const response = await fetch(url, {
-      method: "POST",
-      body: JSON.stringify(payload),
-      headers: {
-        "Content-type": "application/json; charset=UTF-8"
-      }
-    });
-    const createdItem = await response.json();
-    console.log(createdItem);
-    this.props.onSubmit(createdItem);
+    const { type } = this.props;
+    const payload = this.getPayload(type);
+    const endpoint = type === "posts" ? API.createPost : API.createComment;
+    const item = await endpoint(payload);
+
+    this.props.onSubmit(item);
     this.setState({ loading: false, title: "", body: "" });
   };
 

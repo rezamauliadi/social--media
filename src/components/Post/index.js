@@ -15,11 +15,13 @@ import {
 import PostComment from "src/components/PostComment";
 import PostForm from "src/components/PostForm";
 
+import API from "src/api";
 import getAvatar from "src/helpers/avatar-helper";
 
 class Post extends Component {
   state = {
     id: 0,
+    userId: 0,
     title: "",
     body: "",
     tempTitle: "",
@@ -43,40 +45,31 @@ class Post extends Component {
   updatePost = async () => {
     this.setState({ updatingPost: true, invalidForm: false });
 
-    const { id, body, title } = this.state;
-    const { userId } = this.props;
-
+    const { id, body, title, userId } = this.state;
     if (!body || !title) {
       this.setState({ updatingPost: false, invalidForm: true });
       return;
     }
-
     if (id > 100) {
       // handle post id not found if exceed 100
       this.setState({ showUpdateForm: false, updatingPost: false });
       return;
     }
 
-    const url = `https://jsonplaceholder.typicode.com/posts/${id}`;
-    const response = await fetch(url, {
-      method: "PUT",
-      body: JSON.stringify({ id, title, body, userId }),
-      headers: {
-        "Content-type": "application/json; charset=UTF-8"
-      }
-    });
-    const updatedPost = await response.json();
+    const payload = { id, title, body, userId };
+    const updatedPost = await API.updatePost(payload, id);
+
     this.props.onUpdatePost(updatedPost);
     this.setState({ showUpdateForm: false, updatingPost: false });
   };
 
   deletePost = async () => {
     this.setState({ deletingPost: true });
-    const { id } = this.state;
-    const url = `http://jsonplaceholder.typicode.com/posts/${id}`;
-    const response = await fetch(url, { method: "DELETE" });
 
-    if (response.status === 200) {
+    const { id } = this.state;
+    const status = await API.deletePost(id);
+
+    if (status === 200) {
       this.setState({ opacity: "0", deletePost: false });
       setTimeout(() => {
         this.props.onDeletePost(id);
@@ -84,21 +77,20 @@ class Post extends Component {
     }
   };
 
-  getComments = async id => {
-    const url = `http://jsonplaceholder.typicode.com/comments?postId=${id}`;
-    const response = await fetch(url);
-    const data = await response.json();
-    return data;
+  getComments = async () => {
+    const { id } = this.state;
+    const comments = await API.retrieveCommentsByPost(id);
+    return comments;
   };
 
   pushNewComment = newComment => {
-    const newCommentList = [...this.state.comments];
-    newCommentList.push(newComment);
-    this.setState({ comments: newCommentList });
+    const comments = [...this.state.comments];
+    comments.push(newComment);
+    this.setState({ comments });
   };
 
   toggleComments = async () => {
-    const { id, comments, hasFetchComments, showComments } = this.state;
+    const { comments, hasFetchComments, showComments } = this.state;
 
     if (!showComments) {
       if (comments.length || (!comments.length && hasFetchComments)) {
@@ -108,7 +100,7 @@ class Post extends Component {
         });
       } else {
         this.setState({ fetchingComments: true });
-        const comments = await this.getComments(id);
+        const comments = await this.getComments();
         this.setState({
           comments,
           commentButtonText: "Hide Comments",
@@ -126,16 +118,17 @@ class Post extends Component {
   };
 
   commentButtonContent = () => {
-    if (this.state.fetchingComments) {
+    const { fetchingComments, commentButtonText } = this.state;
+
+    if (fetchingComments) {
       return (
         <div>
           <Loader style={{ marginRight: "4px" }} size="mini" active inline />{" "}
           Loading...
         </div>
       );
-    } else {
-      return this.state.commentButtonText;
     }
+    return commentButtonText;
   };
 
   commentForm = () => {
@@ -170,9 +163,8 @@ class Post extends Component {
           {this.commentForm()}
         </div>
       );
-    } else {
-      return <div />;
     }
+    return <div />;
   };
 
   toggleUpdateForm = isOpen => {
@@ -240,19 +232,19 @@ class Post extends Component {
           />
         </Form>
       );
-    } else {
-      return (
-        <div>
-          <div style={{ fontWeight: "bold", fontStyle: "italic" }}>{title}</div>
-          {body}
-        </div>
-      );
     }
+    return (
+      <div>
+        <div style={{ fontWeight: "bold", fontStyle: "italic" }}>{title}</div>
+        {body}
+      </div>
+    );
   };
 
   async componentDidMount() {
     const { post } = this.props;
     this.setState({
+      userId: post.userId,
       id: post.id,
       title: post.title,
       body: post.body

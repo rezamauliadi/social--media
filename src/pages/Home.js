@@ -3,8 +3,9 @@ import React, { Component } from "react";
 import MenuBar from "src/components/MenuBar";
 import Post from "src/components/Post";
 import PostForm from "src/components/PostForm";
-
 import { Container, Dimmer, Header, Loader, Segment } from "semantic-ui-react";
+
+import API from "src/api";
 
 class Home extends Component {
   state = {
@@ -13,27 +14,19 @@ class Home extends Component {
     loading: true
   };
 
-  async getUsers() {
-    const response = await fetch("http://jsonplaceholder.typicode.com/users");
-    const data = await response.json();
-    this.setState({ users: data });
-  }
+  getUsers = async () => {
+    const users = await API.retrieveUsers();
+    this.setState({ users });
+  };
 
-  async getPosts() {
-    const response = await fetch("http://jsonplaceholder.typicode.com/posts");
-    const data = await response.json();
-    this.setState({ posts: data });
-  }
-
-  async componentDidMount() {
-    await this.getUsers();
-    await this.getPosts();
-    this.setState({ loading: false });
-  }
+  getPosts = async () => {
+    const posts = await API.retrievePosts();
+    this.setState({ posts });
+  };
 
   pushNewPost = newPost => {
-    const newPostList = [newPost, ...this.state.posts];
-    this.setState({ posts: newPostList });
+    const posts = [newPost, ...this.state.posts];
+    this.setState({ posts });
   };
 
   updatePost = updatedPost => {
@@ -63,18 +56,24 @@ class Home extends Component {
           <Loader />
         </Dimmer>
       );
-    } else {
-      return posts.map(post => (
-        <Post
-          key={post.id}
-          post={post}
-          user={this.getUser(post, users)}
-          onDeletePost={this.removePost}
-          onUpdatePost={this.updatePost}
-        />
-      ));
     }
+
+    return posts.map(post => (
+      <Post
+        key={post.id}
+        post={post}
+        user={this.getUser(post, users)}
+        onDeletePost={this.removePost}
+        onUpdatePost={this.updatePost}
+      />
+    ));
   };
+
+  async componentDidMount() {
+    await this.getUsers();
+    await this.getPosts();
+    this.setState({ loading: false });
+  }
 
   render() {
     return (

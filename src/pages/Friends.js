@@ -2,9 +2,9 @@ import React, { Component } from "react";
 
 import MenuBar from "src/components/MenuBar";
 import UserList from "src/components/UserList";
-
-import { Route } from "react-router-dom";
 import { Container, Dimmer, Header, Loader, Segment } from "semantic-ui-react";
+
+import API from "src/api";
 
 class Friends extends Component {
   state = {
@@ -12,16 +12,10 @@ class Friends extends Component {
     loading: true
   };
 
-  async getUsers() {
-    const response = await fetch("http://jsonplaceholder.typicode.com/users");
-    const data = await response.json();
-    this.setState({ users: data });
-  }
-
-  async componentDidMount() {
-    await this.getUsers();
-    this.setState({ loading: false });
-  }
+  getUsers = async () => {
+    const users = await API.retrieveUsers();
+    this.setState({ users });
+  };
 
   userList = () => {
     if (this.state.loading) {
@@ -30,11 +24,16 @@ class Friends extends Component {
           <Loader />
         </Dimmer>
       );
-    } else {
-      const url = this.props.match.url;
-      return <UserList users={this.state.users} url={url} />;
     }
+
+    const url = this.props.match.url;
+    return <UserList users={this.state.users} url={url} />;
   };
+
+  async componentDidMount() {
+    await this.getUsers();
+    this.setState({ loading: false });
+  }
 
   render() {
     return (
