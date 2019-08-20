@@ -9,7 +9,7 @@ import getAvatar from "src/helpers/avatar-helper";
 const MenuBar = ({ active }) => {
   const menus = [
     { route: "/", name: "Home", key: "home" },
-    { route: "/friends", name: "Friends", key: "friends" }
+    { route: "/users", name: "Friends", key: "users" }
   ];
 
   const isActive = key => key === active;

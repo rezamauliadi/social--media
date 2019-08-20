@@ -1,13 +1,19 @@
 import React from "react";
 import PropTypes from "prop-types";
 
+import { Link } from "react-router-dom";
 import { Card, Image } from "semantic-ui-react";
 
 import getAvatar from "src/helpers/avatar-helper";
 
-const UserList = ({ users }) => {
+const UserList = ({ users, url }) => {
   const userCard = user => (
-    <Card key={user.id} style={{ width: "198px" }}>
+    <Card
+      as={Link}
+      to={`${url}/${user.id}`}
+      key={user.id}
+      style={{ width: "198px" }}
+    >
       <Image src={getAvatar(user.id)} ui={false} wrapped />
       <Card.Content>
         <Card.Header>{user.name}</Card.Header>

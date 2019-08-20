@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+
 import MenuBar from "src/components/MenuBar";
 import HomeFeed from "src/components/HomeFeed";
 

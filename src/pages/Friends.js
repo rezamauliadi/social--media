@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import MenuBar from "src/components/MenuBar";
 import UserList from "src/components/UserList";
 
+import { Route } from "react-router-dom";
 import { Container, Dimmer, Header, Loader, Segment } from "semantic-ui-react";
 
 class Friends extends Component {
@@ -30,14 +31,15 @@ class Friends extends Component {
         </Dimmer>
       );
     } else {
-      return <UserList users={this.state.users} />;
+      const url = this.props.match.url;
+      return <UserList users={this.state.users} url={url} />;
     }
   };
 
   render() {
     return (
       <div>
-        <MenuBar active="friends" />
+        <MenuBar active="users" />
 
         <div style={{ background: "rgba(0, 0, 0, 0.08)", padding: "30px 0" }}>
           <Container text>
