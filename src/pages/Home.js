@@ -36,6 +36,14 @@ class Home extends Component {
     this.setState({ posts: newPostList });
   };
 
+  updatePost = updatedPost => {
+    const { posts } = this.state;
+    const postIndex = posts.findIndex(post => post.id === updatedPost.id);
+    const newPostList = [...posts];
+    newPostList.splice(postIndex, 1, updatedPost);
+    this.setState({ posts: newPostList });
+  };
+
   removePost = postId => {
     const { posts } = this.state;
     const postIndex = posts.findIndex(post => post.id === postId);
@@ -62,6 +70,7 @@ class Home extends Component {
           post={post}
           user={this.getUser(post, users)}
           onDeletePost={this.removePost}
+          onUpdatePost={this.updatePost}
         />
       ));
     }

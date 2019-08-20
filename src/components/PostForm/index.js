@@ -11,7 +11,7 @@ class PostForm extends Component {
     loading: false
   };
 
-  async addPost() {
+  addPost = async () => {
     this.setState({ loading: true, invalid: false });
 
     const { body, title, userId } = this.state;
@@ -29,8 +29,8 @@ class PostForm extends Component {
     });
     const createdPost = await response.json();
     this.props.onSubmitPost(createdPost);
-    this.setState({ loading: false });
-  }
+    this.setState({ loading: false, title: "", body: "" });
+  };
 
   changeValue = (_event, { name, value }) => {
     this.setState({ [name]: value });

@@ -27,6 +27,22 @@ class Posts extends Component {
     this.setState({ posts: newPostList });
   };
 
+  updatePost = updatedPost => {
+    const { posts } = this.state;
+    const postIndex = posts.findIndex(post => post.id === updatedPost.id);
+    const newPostList = [...posts];
+    newPostList.splice(postIndex, 1, updatedPost);
+    this.setState({ posts: newPostList });
+  };
+
+  removePost = postId => {
+    const { posts } = this.state;
+    const postIndex = posts.findIndex(post => post.id === postId);
+    const newPostList = [...posts];
+    newPostList.splice(postIndex, 1);
+    this.setState({ posts: newPostList });
+  };
+
   renderUserPosts = () => {
     const { loading, posts } = this.state;
     const { user } = this.props;
@@ -42,11 +58,17 @@ class Posts extends Component {
         <div style={{ padding: "12px 24px" }}>
           <Header as="h2">{user.name}'s posts</Header>
 
-          <PostForm pushNewPost={this.pushNewPost} />
+          <PostForm onSubmitPost={this.pushNewPost} />
           <Divider style={{ margin: "30px 0" }} />
 
           {posts.map(post => (
-            <Post key={post.id} post={post} user={user} />
+            <Post
+              key={post.id}
+              post={post}
+              user={user}
+              onDeletePost={this.removePost}
+              onUpdatePost={this.updatePost}
+            />
           ))}
         </div>
       );

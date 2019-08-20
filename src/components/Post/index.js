@@ -6,8 +6,10 @@ import {
   Comment,
   Divider,
   Feed,
+  Form,
   Image,
-  Loader
+  Loader,
+  Message
 } from "semantic-ui-react";
 import PostComment from "src/components/PostComment";
 
@@ -15,17 +17,60 @@ import getAvatar from "src/helpers/avatar-helper";
 
 class Post extends Component {
   state = {
+    id: 0,
+    title: "",
+    body: "",
+    tempTitle: "",
+    tempBody: "",
     comments: [],
     showComments: false,
-    buttonText: "Show Comments",
+    showUpdateForm: false,
+    hasFetchComments: false,
     fetchingComments: false,
     deletingPost: false,
-    hasFetch: false,
-    opacity: "1"
+    updatingPost: false,
+    invalidForm: false,
+    opacity: "1",
+    commentButtonText: "Show Comments"
   };
 
-  deletePost = async id => {
+  changeValue = (_event, { name, value }) => {
+    this.setState({ [name]: value });
+  };
+
+  updatePost = async () => {
+    this.setState({ updatingPost: true, invalidForm: false });
+
+    const { id, body, title } = this.state;
+    const { userId } = this.props;
+
+    if (!body || !title) {
+      this.setState({ updatingPost: false, invalidForm: true });
+      return;
+    }
+
+    if (id > 100) {
+      // handle post id not found if exceed 100
+      this.setState({ showUpdateForm: false, updatingPost: false });
+      return;
+    }
+
+    const url = `https://jsonplaceholder.typicode.com/posts/${id}`;
+    const response = await fetch(url, {
+      method: "PUT",
+      body: JSON.stringify({ id, title, body, userId }),
+      headers: {
+        "Content-type": "application/json; charset=UTF-8"
+      }
+    });
+    const updatedPost = await response.json();
+    this.props.onUpdatePost(updatedPost);
+    this.setState({ showUpdateForm: false, updatingPost: false });
+  };
+
+  deletePost = async () => {
     this.setState({ deletingPost: true });
+    const { id } = this.state;
     const url = `http://jsonplaceholder.typicode.com/posts/${id}`;
     const response = await fetch(url, { method: "DELETE" });
 
@@ -44,29 +89,35 @@ class Post extends Component {
     return data;
   };
 
-  toggleComments = async id => {
-    const { comments, hasFetch, showComments } = this.state;
+  toggleComments = async () => {
+    const { id, comments, hasFetchComments, showComments } = this.state;
 
     if (!showComments) {
-      if (comments.length || (!comments.length && hasFetch)) {
-        this.setState({ showComments: true, buttonText: "Hide Comments" });
+      if (comments.length || (!comments.length && hasFetchComments)) {
+        this.setState({
+          showComments: true,
+          commentButtonText: "Hide Comments"
+        });
       } else {
         this.setState({ fetchingComments: true });
         const comments = await this.getComments(id);
         this.setState({
           comments,
-          buttonText: "Hide Comments",
+          commentButtonText: "Hide Comments",
           fetchingComments: false,
-          hasFetch: true,
+          hasFetchComments: true,
           showComments: true
         });
       }
     } else {
-      this.setState({ showComments: false, buttonText: "Show Comments" });
+      this.setState({
+        showComments: false,
+        commentButtonText: "Show Comments"
+      });
     }
   };
 
-  buttonContent = () => {
+  commentButtonContent = () => {
     if (this.state.fetchingComments) {
       return (
         <div>
@@ -75,27 +126,111 @@ class Post extends Component {
         </div>
       );
     } else {
-      return this.state.buttonText;
+      return this.state.commentButtonText;
     }
   };
 
   renderComments = () => {
-    const { comments, hasFetch, showComments } = this.state;
+    const { comments, hasFetchComments, showComments } = this.state;
 
     if (comments.length && showComments) {
       return comments.map((comment, index) => (
         <PostComment comment={comment} key={index} />
       ));
-    } else if (!comments.length && hasFetch && showComments) {
+    } else if (!comments.length && hasFetchComments && showComments) {
       return <div>No comment...</div>;
     } else {
       return <div />;
     }
   };
 
+  toggleUpdateForm = isOpen => {
+    if (isOpen) {
+      const { title, body } = this.state;
+      this.setState({
+        tempTitle: title,
+        tempBody: body,
+        showUpdateForm: isOpen
+      });
+    } else {
+      const { tempTitle, tempBody } = this.state;
+      this.setState({
+        title: tempTitle,
+        body: tempBody,
+        showUpdateForm: isOpen
+      });
+    }
+  };
+
+  renderPostContent = () => {
+    const {
+      title,
+      body,
+      showUpdateForm,
+      invalidForm,
+      deletingPost,
+      updatingPost
+    } = this.state;
+
+    if (showUpdateForm) {
+      return (
+        <Form warning={invalidForm}>
+          <Form.Input
+            placeholder="Give it a title!"
+            name="title"
+            value={title}
+            onChange={this.changeValue}
+          />
+          <Form.TextArea
+            placeholder="Write your post!"
+            name="body"
+            value={body}
+            rows="5"
+            onChange={this.changeValue}
+          />
+          <Message size="mini" warning>
+            It will be great if you put some words in the post and give it a
+            cool title.
+          </Message>
+          <Button
+            size="tiny"
+            icon="send"
+            primary
+            loading={updatingPost}
+            disabled={deletingPost || updatingPost}
+            onClick={() => this.updatePost()}
+          />
+          <Button
+            size="tiny"
+            icon="cancel"
+            color="orange"
+            disabled={deletingPost || updatingPost}
+            onClick={() => this.toggleUpdateForm(false)}
+          />
+        </Form>
+      );
+    } else {
+      return (
+        <div>
+          <div style={{ fontWeight: "bold", fontStyle: "italic" }}>{title}</div>
+          {body}
+        </div>
+      );
+    }
+  };
+
+  async componentDidMount() {
+    const { post } = this.props;
+    this.setState({
+      id: post.id,
+      title: post.title,
+      body: post.body
+    });
+  }
+
   render() {
-    const { deletingPost, opacity } = this.state;
-    const { post, user } = this.props;
+    const { deletingPost, updatingPost, opacity } = this.state;
+    const { user } = this.props;
 
     return (
       <div style={{ opacity, transition: "opacity 500ms linear" }}>
@@ -112,21 +247,16 @@ class Post extends Component {
                 posted!
                 <Feed.Date>1 day ago</Feed.Date>
               </Feed.Summary>
-              <Feed.Extra text>
-                <div style={{ fontWeight: "bold", fontStyle: "italic" }}>
-                  {post.title}
-                </div>
-                {post.body}
-              </Feed.Extra>
+              <Feed.Extra text>{this.renderPostContent()}</Feed.Extra>
             </Feed.Content>
           </Feed.Event>
         </Feed>
         <Button
           size="mini"
           style={{ marginLeft: "50px" }}
-          onClick={() => this.toggleComments(post.id)}
+          onClick={() => this.toggleComments()}
         >
-          {this.buttonContent()}
+          {this.commentButtonContent()}
         </Button>
         <Button
           size="tiny"
@@ -134,7 +264,17 @@ class Post extends Component {
           floated="right"
           icon="trash"
           loading={deletingPost}
-          onClick={() => this.deletePost(post.id)}
+          disabled={deletingPost || updatingPost}
+          onClick={() => this.deletePost()}
+        />
+        <Button
+          size="tiny"
+          color="yellow"
+          floated="right"
+          icon="pencil"
+          loading={updatingPost}
+          disabled={deletingPost || updatingPost}
+          onClick={() => this.toggleUpdateForm(true)}
         />
 
         <Comment.Group style={{ marginLeft: "60px" }}>
