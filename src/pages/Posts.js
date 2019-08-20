@@ -58,7 +58,7 @@ class Posts extends Component {
         <div style={{ padding: "12px 24px" }}>
           <Header as="h2">{user.name}'s posts</Header>
 
-          <PostForm onSubmitPost={this.pushNewPost} />
+          <PostForm type="posts" onSubmit={this.pushNewPost} />
           <Divider style={{ margin: "30px 0" }} />
 
           {posts.map(post => (

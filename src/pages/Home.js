@@ -85,7 +85,7 @@ class Home extends Component {
           <Container text>
             <Header as="h2">Your Feed</Header>
             <Segment>
-              <PostForm onSubmitPost={this.pushNewPost} />
+              <PostForm type="posts" onSubmit={this.pushNewPost} />
               <div style={{ padding: "24px" }}>{this.homeFeeds()}</div>
             </Segment>
           </Container>

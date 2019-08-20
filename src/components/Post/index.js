@@ -8,10 +8,12 @@ import {
   Feed,
   Form,
   Image,
+  Label,
   Loader,
   Message
 } from "semantic-ui-react";
 import PostComment from "src/components/PostComment";
+import PostForm from "src/components/PostForm";
 
 import getAvatar from "src/helpers/avatar-helper";
 
@@ -89,6 +91,12 @@ class Post extends Component {
     return data;
   };
 
+  pushNewComment = newComment => {
+    const newCommentList = [...this.state.comments];
+    newCommentList.push(newComment);
+    this.setState({ comments: newCommentList });
+  };
+
   toggleComments = async () => {
     const { id, comments, hasFetchComments, showComments } = this.state;
 
@@ -130,15 +138,38 @@ class Post extends Component {
     }
   };
 
+  commentForm = () => {
+    return (
+      <div style={{ marginTop: "18px" }}>
+        <PostForm type="comments" onSubmit={this.pushNewComment} />
+      </div>
+    );
+  };
+
+  commentList = () => {
+    const { comments, id } = this.state;
+    return comments.map(comment => (
+      <PostComment comment={comment} key={`${id}-${comment.id}`} />
+    ));
+  };
+
   renderComments = () => {
     const { comments, hasFetchComments, showComments } = this.state;
 
     if (comments.length && showComments) {
-      return comments.map((comment, index) => (
-        <PostComment comment={comment} key={index} />
-      ));
+      return (
+        <div>
+          {this.commentList()}
+          {this.commentForm()}
+        </div>
+      );
     } else if (!comments.length && hasFetchComments && showComments) {
-      return <div>No comment...</div>;
+      return (
+        <div>
+          <Label basic>No comment yet...</Label>
+          {this.commentForm()}
+        </div>
+      );
     } else {
       return <div />;
     }

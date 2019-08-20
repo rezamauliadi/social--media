@@ -11,24 +11,46 @@ class PostForm extends Component {
     loading: false
   };
 
-  addPost = async () => {
-    this.setState({ loading: true, invalid: false });
+  getFetchSetting = () => {
+    let payload = {};
+    let url = "";
 
     const { body, title, userId } = this.state;
+    if (this.props.type === "posts") {
+      payload = { title, body, userId };
+      url = "https://jsonplaceholder.typicode.com/posts";
+    } else if (this.props.type === "comments") {
+      payload = {
+        body,
+        name: title,
+        postId: this.props.postId,
+        email: "user@email.com"
+      };
+      url = "https://jsonplaceholder.typicode.com/comments";
+    }
+    return { payload, url };
+  };
+
+  submitItem = async () => {
+    this.setState({ loading: true, invalid: false });
+
+    const { body, title } = this.state;
     if (!body || !title) {
       this.setState({ loading: false, invalid: true });
       return;
     }
 
-    const response = await fetch("https://jsonplaceholder.typicode.com/posts", {
+    const { payload, url } = this.getFetchSetting();
+    const response = await fetch(url, {
       method: "POST",
-      body: JSON.stringify({ title, body, userId }),
+      body: JSON.stringify(payload),
       headers: {
         "Content-type": "application/json; charset=UTF-8"
       }
     });
-    const createdPost = await response.json();
-    this.props.onSubmitPost(createdPost);
+    const createdItem = await response.json();
+    console.log(createdItem);
+    this.props.onSubmit(createdItem);
     this.setState({ loading: false, title: "", body: "" });
   };
 
@@ -42,6 +64,7 @@ class PostForm extends Component {
     return (
       <Form warning={invalid}>
         <Form.TextArea
+          style={{ marginBottom: "-8px" }}
           placeholder="Write your post!"
           name="body"
           value={body}
@@ -63,7 +86,7 @@ class PostForm extends Component {
           icon="send"
           loading={loading}
           primary
-          onClick={() => this.addPost()}
+          onClick={() => this.submitItem()}
         />
       </Form>
     );
