@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 
 import { Button, Form, Message } from "semantic-ui-react";
 
@@ -123,5 +124,16 @@ class UpdateForm extends Component {
     );
   }
 }
+
+UpdateForm.propTypes = {
+  id: PropTypes.number,
+  parentId: PropTypes.number,
+  type: PropTypes.string,
+  title: PropTypes.string,
+  body: PropTypes.string,
+  additionalInfo: PropTypes.string,
+  onClose: PropTypes.func,
+  afterSubmit: PropTypes.func
+};
 
 export default UpdateForm;

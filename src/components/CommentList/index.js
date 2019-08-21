@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 
 import { Button, Comment, Label, Loader } from "semantic-ui-react";
 import CommentItem from "src/components/CommentItem";
@@ -13,10 +14,6 @@ class CommentList extends Component {
     hasFetchComments: false,
     fetchingComments: false,
     commentButtonText: "Show Comments"
-  };
-
-  changeValue = (_event, { name, value }) => {
-    this.setState({ [name]: value });
   };
 
   getComments = async () => {
@@ -102,11 +99,12 @@ class CommentList extends Component {
   };
 
   commentList = () => {
-    const { comments, id } = this.state;
+    const { comments } = this.state;
+    const { postId } = this.props;
     return comments.map(comment => (
       <CommentItem
         comment={comment}
-        key={`${id}-${comment.id}`}
+        key={`${postId}-${comment.id}`}
         onUpdateComment={this.updateComment}
         onDeleteComment={this.removeComment}
       />
@@ -151,5 +149,9 @@ class CommentList extends Component {
     );
   }
 }
+
+CommentList.propTypes = {
+  postId: PropTypes.number
+};
 
 export default CommentList;

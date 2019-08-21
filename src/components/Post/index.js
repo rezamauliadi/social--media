@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 
 import { Link } from "react-router-dom";
 import { Button, Divider, Feed, Image, Message } from "semantic-ui-react";
@@ -119,5 +120,12 @@ class Post extends Component {
     );
   }
 }
+
+Post.propTypes = {
+  post: PropTypes.object,
+  user: PropTypes.object,
+  onDeletePost: PropTypes.func,
+  onUpdatePost: PropTypes.func
+};
 
 export default Post;

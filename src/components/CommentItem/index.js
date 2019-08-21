@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 
 import { Button, Comment, Label } from "semantic-ui-react";
 import UpdateForm from "src/components/UpdateForm";
@@ -110,5 +111,11 @@ class CommentItem extends Component {
     );
   }
 }
+
+CommentItem.propTypes = {
+  comment: PropTypes.object,
+  onUpdateComment: PropTypes.func,
+  onDeleteComment: PropTypes.func
+};
 
 export default CommentItem;

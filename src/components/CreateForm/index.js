@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 
 import { Button, Form, Message } from "semantic-ui-react";
 
@@ -25,7 +26,7 @@ class CreateForm extends Component {
     return {
       body,
       name: title,
-      postId: this.props.postId,
+      postId: 1,
       email: "user@email.com"
     };
   };
@@ -82,5 +83,10 @@ class CreateForm extends Component {
     );
   }
 }
+
+CreateForm.propTypes = {
+  type: PropTypes.string,
+  onSubmit: PropTypes.func
+};
 
 export default CreateForm;
