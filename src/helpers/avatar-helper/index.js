@@ -13,6 +13,13 @@ const avatar = [
   ["stevie", "jpg"]
 ];
 
-const getAvatar = id => `/images/${avatar[id][0]}.${avatar[id][1]}`;
+const getAvatar = id => {
+  let ava = avatar[0];
+  if (id && avatar[id]) {
+    ava = avatar[id];
+  }
+
+  return `/images/${ava[0]}.${ava[1]}`;
+};
 
 export default getAvatar;
