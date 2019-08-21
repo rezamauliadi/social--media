@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { Button, Form, Message } from "semantic-ui-react";
 
 import API from "src/api";
-class PostForm extends Component {
+class CreateForm extends Component {
   state = {
     userId: 1,
     body: "",
@@ -83,4 +83,4 @@ class PostForm extends Component {
   }
 }
 
-export default PostForm;
+export default CreateForm;

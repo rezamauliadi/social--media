@@ -5,7 +5,7 @@ import { Button, Comment, Form, Label, Message } from "semantic-ui-react";
 import API from "src/api";
 import getAvatar from "src/helpers/avatar-helper";
 
-class PostComment extends Component {
+class CommentItem extends Component {
   state = {
     id: 0,
     postId: 0,
@@ -193,4 +193,4 @@ class PostComment extends Component {
   }
 }
 
-export default PostComment;
+export default CommentItem;

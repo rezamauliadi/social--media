@@ -2,7 +2,7 @@ import React, { Component } from "react";
 
 import { Dimmer, Divider, Header, Loader } from "semantic-ui-react";
 import Post from "src/components/Post";
-import PostForm from "src/components/PostForm";
+import CreateForm from "src/components/CreateForm";
 
 import API from "src/api";
 
@@ -53,7 +53,7 @@ class Posts extends Component {
     return (
       <div style={{ padding: "12px 24px" }}>
         <Header as="h2">{user.name}'s posts</Header>
-        <PostForm type="posts" onSubmit={this.pushNewPost} />
+        <CreateForm type="posts" onSubmit={this.pushNewPost} />
         <Divider style={{ margin: "30px 0" }} />
 
         {posts.map(post => (

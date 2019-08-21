@@ -2,7 +2,7 @@ import React, { Component } from "react";
 
 import MenuBar from "src/components/MenuBar";
 import Post from "src/components/Post";
-import PostForm from "src/components/PostForm";
+import CreateForm from "src/components/CreateForm";
 import { Container, Dimmer, Header, Loader, Segment } from "semantic-ui-react";
 
 import API from "src/api";
@@ -84,7 +84,7 @@ class Home extends Component {
           <Container text>
             <Header as="h2">Your Feed</Header>
             <Segment>
-              <PostForm type="posts" onSubmit={this.pushNewPost} />
+              <CreateForm type="posts" onSubmit={this.pushNewPost} />
               <div style={{ padding: "24px" }}>{this.homeFeeds()}</div>
             </Segment>
           </Container>
