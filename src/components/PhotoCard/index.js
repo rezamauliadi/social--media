@@ -15,7 +15,7 @@ const PhotoCard = ({ items, isAlbum, onPhotoClick }) => {
   const cardProps = item => {
     const prop = { as: isAlbum ? Link : "a" };
     if (isAlbum) prop.to = item.url;
-    else prop.href = item.url;
+    else prop.onClick = () => onPhotoClick(item.id);
     return prop;
   };
 
@@ -23,12 +23,7 @@ const PhotoCard = ({ items, isAlbum, onPhotoClick }) => {
     <div>
       <Card.Group itemsPerRow={3}>
         {items.map(item => (
-          <Card
-            as="a"
-            key={item.id}
-            color="blue"
-            onClick={() => onPhotoClick(item.id)}
-          >
+          <Card {...cardProps(item)} key={item.id} color="blue">
             <Image
               style={{ height: "173px", width: "172px" }}
               src={item.thumbnailUrl}
