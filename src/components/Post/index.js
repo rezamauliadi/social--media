@@ -1,56 +1,24 @@
 import React, { Component } from "react";
 
 import { Link } from "react-router-dom";
-import { Button, Divider, Feed, Form, Image, Message } from "semantic-ui-react";
+import { Button, Divider, Feed, Image, Message } from "semantic-ui-react";
 import CommentList from "src/components/CommentList";
+import UpdateForm from "src/components/UpdateForm";
 
 import API from "src/api";
 import getAvatar from "src/helpers/avatar-helper";
 
 class Post extends Component {
   state = {
-    id: 0,
-    userId: 0,
-    title: "",
-    body: "",
-    tempTitle: "",
-    tempBody: "",
     showUpdateForm: false,
     deletingPost: false,
-    updatingPost: false,
-    invalidForm: false,
     opacity: "1"
-  };
-
-  changeValue = (_event, { name, value }) => {
-    this.setState({ [name]: value });
-  };
-
-  updatePost = async () => {
-    this.setState({ updatingPost: true, invalidForm: false });
-
-    const { id, body, title, userId } = this.state;
-    if (!body || !title) {
-      this.setState({ updatingPost: false, invalidForm: true });
-      return;
-    }
-    if (id > 100) {
-      // handle post id not found if exceed 100
-      this.setState({ showUpdateForm: false, updatingPost: false });
-      return;
-    }
-
-    const payload = { id, title, body, userId };
-    const updatedPost = await API.updatePost(payload, id);
-
-    this.props.onUpdatePost(updatedPost);
-    this.setState({ showUpdateForm: false, updatingPost: false });
   };
 
   deletePost = async () => {
     this.setState({ deletingPost: true });
 
-    const { id } = this.state;
+    const { id } = this.props.post;
     const status = await API.deletePost(id);
 
     if (status === 200) {
@@ -61,99 +29,50 @@ class Post extends Component {
     }
   };
 
-  toggleUpdateForm = isOpen => {
-    if (isOpen) {
-      const { title, body } = this.state;
-      this.setState({
-        tempTitle: title,
-        tempBody: body,
-        showUpdateForm: isOpen
-      });
-    } else {
-      const { tempTitle, tempBody } = this.state;
-      this.setState({
-        title: tempTitle,
-        body: tempBody,
-        showUpdateForm: isOpen
-      });
-    }
+  afterSubmitForm = updatedPost => {
+    this.props.onUpdatePost(updatedPost);
+    this.setState({ showUpdateForm: false });
+  };
+
+  openUpdateForm = () => {
+    this.setState({ showUpdateForm: true });
+  };
+
+  closeUpdateForm = () => {
+    this.setState({ showUpdateForm: false });
   };
 
   renderPostContent = () => {
-    const {
-      title,
-      body,
-      showUpdateForm,
-      invalidForm,
-      deletingPost,
-      updatingPost
-    } = this.state;
+    const { showUpdateForm } = this.state;
+    const { post } = this.props;
 
     if (showUpdateForm) {
       return (
-        <Form warning={invalidForm}>
-          <Form.Input
-            placeholder="Give it a title!"
-            name="title"
-            value={title}
-            onChange={this.changeValue}
-          />
-          <Form.TextArea
-            placeholder="Write your post!"
-            name="body"
-            value={body}
-            rows="5"
-            onChange={this.changeValue}
-          />
-          <Message size="mini" warning>
-            It will be great if you put some words in the post and give it a
-            cool title.
-          </Message>
-          <Button
-            size="tiny"
-            icon="send"
-            primary
-            loading={updatingPost}
-            disabled={deletingPost || updatingPost}
-            onClick={() => this.updatePost()}
-          />
-          <Button
-            size="tiny"
-            icon="cancel"
-            color="orange"
-            disabled={deletingPost || updatingPost}
-            onClick={() => this.toggleUpdateForm(false)}
-          />
-        </Form>
+        <UpdateForm
+          type="posts"
+          id={post.id}
+          title={post.title}
+          body={post.body}
+          parentId={post.userId}
+          onClose={this.closeUpdateForm}
+          afterSubmit={this.afterSubmitForm}
+        />
       );
     }
+
     return (
       <div>
-        <div style={{ fontWeight: "bold", fontStyle: "italic" }}>{title}</div>
-        {body}
+        <div style={{ fontWeight: "bold", fontStyle: "italic" }}>
+          {post.title}
+        </div>
+        {post.body}
       </div>
     );
   };
 
-  async componentDidMount() {
-    const { post } = this.props;
-    this.setState({
-      userId: post.userId,
-      id: post.id,
-      title: post.title,
-      body: post.body
-    });
-  }
-
   render() {
-    const {
-      id,
-      deletingPost,
-      updatingPost,
-      opacity,
-      showUpdateForm
-    } = this.state;
-    const { user } = this.props;
+    const { deletingPost, opacity, showUpdateForm } = this.state;
+    const { post, user } = this.props;
 
     return (
       <div style={{ opacity, transition: "opacity 500ms linear" }}>
@@ -180,7 +99,7 @@ class Post extends Component {
           floated="right"
           icon="trash"
           loading={deletingPost}
-          disabled={deletingPost || updatingPost}
+          disabled={deletingPost}
           onClick={() => this.deletePost()}
           style={{ display: showUpdateForm ? "none" : "block" }}
         />
@@ -189,13 +108,12 @@ class Post extends Component {
           color="yellow"
           floated="right"
           icon="pencil"
-          loading={updatingPost}
-          disabled={deletingPost || updatingPost}
-          onClick={() => this.toggleUpdateForm(true)}
+          disabled={deletingPost}
+          onClick={() => this.openUpdateForm()}
           style={{ display: showUpdateForm ? "none" : "block" }}
         />
 
-        <CommentList postId={id} />
+        <CommentList postId={post.id} />
         <Divider />
       </div>
     );

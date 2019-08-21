@@ -12,6 +12,10 @@ class CreateForm extends Component {
     loading: false
   };
 
+  changeValue = (_event, { name, value }) => {
+    this.setState({ [name]: value });
+  };
+
   getPayload = type => {
     const { body, title, userId } = this.state;
 
@@ -42,10 +46,6 @@ class CreateForm extends Component {
 
     this.props.onSubmit(item);
     this.setState({ loading: false, title: "", body: "" });
-  };
-
-  changeValue = (_event, { name, value }) => {
-    this.setState({ [name]: value });
   };
 
   render() {

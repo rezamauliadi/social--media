@@ -1,55 +1,22 @@
 import React, { Component } from "react";
 
 import { Button, Comment, Form, Label, Message } from "semantic-ui-react";
+import UpdateForm from "src/components/UpdateForm";
 
 import API from "src/api";
 import getAvatar from "src/helpers/avatar-helper";
 
 class CommentItem extends Component {
   state = {
-    id: 0,
-    postId: 0,
-    name: "",
-    body: "",
-    tempName: "",
-    tempBody: "",
     showUpdateForm: false,
     deletingComment: false,
-    updatingComment: false,
-    invalidForm: false,
-    opacity: "1",
-    commentButtonText: "Show Comments"
-  };
-
-  changeValue = (_event, { name, value }) => {
-    this.setState({ [name]: value });
-  };
-
-  updateComment = async () => {
-    this.setState({ updatingComment: true, invalidForm: false });
-
-    const { id, body, name, email, postId } = this.state;
-    if (!body || !name) {
-      this.setState({ updatingComment: false, invalidForm: true });
-      return;
-    }
-    if (id > 500) {
-      // handle comment id not found if exceed 500
-      this.setState({ showUpdateForm: false, updatingComment: false });
-      return;
-    }
-
-    const payload = { id, name, body, email, postId };
-    const updatedComment = await API.updateComment(payload, id);
-
-    this.props.onUpdateComment(updatedComment);
-    this.setState({ showUpdateForm: false, updatingComment: false });
+    opacity: "1"
   };
 
   deleteComment = async () => {
     this.setState({ deletingComment: true });
 
-    const { id } = this.state;
+    const { id } = this.props.comment;
     const status = await API.deleteComment(id);
 
     if (status === 200) {
@@ -60,98 +27,50 @@ class CommentItem extends Component {
     }
   };
 
-  toggleUpdateForm = isOpen => {
-    if (isOpen) {
-      const { name, body } = this.state;
-      this.setState({
-        tempName: name,
-        tempBody: body,
-        showUpdateForm: isOpen
-      });
-    } else {
-      const { tempName, tempBody } = this.state;
-      this.setState({
-        name: tempName,
-        body: tempBody,
-        showUpdateForm: isOpen
-      });
-    }
+  afterSubmitForm = updatedComment => {
+    this.props.onUpdateComment(updatedComment);
+    this.setState({ showUpdateForm: false });
+  };
+
+  openUpdateForm = () => {
+    this.setState({ showUpdateForm: true });
+  };
+
+  closeUpdateForm = () => {
+    this.setState({ showUpdateForm: false });
   };
 
   renderCommentContent = () => {
-    const {
-      name,
-      body,
-      showUpdateForm,
-      invalidForm,
-      deletingComment,
-      updatingComment
-    } = this.state;
+    const { showUpdateForm } = this.state;
+    const { comment } = this.props;
 
     if (showUpdateForm) {
       return (
-        <Form warning={invalidForm}>
-          <Form.Input
-            placeholder="Give it a title!"
-            name="name"
-            value={name}
-            onChange={this.changeValue}
-          />
-          <Form.TextArea
-            placeholder="Write your post!"
-            name="body"
-            value={body}
-            rows="5"
-            onChange={this.changeValue}
-          />
-          <Message size="mini" warning>
-            It will be great if you put some words in the post and give it a
-            cool title.
-          </Message>
-          <Button
-            basic
-            size="tiny"
-            icon="send"
-            loading={updatingComment}
-            disabled={deletingComment || updatingComment}
-            onClick={() => this.updateComment()}
-          />
-          <Button
-            basic
-            size="tiny"
-            icon="cancel"
-            disabled={deletingComment || updatingComment}
-            onClick={() => this.toggleUpdateForm(false)}
-          />
-        </Form>
+        <UpdateForm
+          type="comments"
+          id={comment.id}
+          title={comment.name}
+          body={comment.body}
+          parentId={comment.postId}
+          additionalInfo={comment.email}
+          onClose={this.closeUpdateForm}
+          afterSubmit={this.afterSubmitForm}
+        />
       );
     }
+
     return (
       <div>
-        <div style={{ fontWeight: "bold", fontStyle: "italic" }}>{name}</div>
-        <div>{body}</div>
+        <div style={{ fontWeight: "bold", fontStyle: "italic" }}>
+          {comment.name}
+        </div>
+        <div>{comment.body}</div>
       </div>
     );
   };
 
-  async componentDidMount() {
-    const { id, postId, name, email, body } = this.props.comment;
-    this.setState({
-      id,
-      postId,
-      name,
-      email,
-      body
-    });
-  }
-
   render() {
-    const {
-      opacity,
-      deletingComment,
-      updatingComment,
-      showUpdateForm
-    } = this.state;
+    const { opacity, deletingComment, showUpdateForm } = this.state;
     const { comment } = this.props;
 
     return (
@@ -172,16 +91,15 @@ class CommentItem extends Component {
                   basic
                   size="tiny"
                   icon="pencil"
-                  loading={updatingComment}
-                  disabled={deletingComment || updatingComment}
-                  onClick={() => this.toggleUpdateForm(true)}
+                  disabled={deletingComment}
+                  onClick={() => this.openUpdateForm()}
                 />
                 <Button
                   basic
                   size="tiny"
                   icon="trash"
                   loading={deletingComment}
-                  disabled={deletingComment || updatingComment}
+                  disabled={deletingComment}
                   onClick={() => this.deleteComment()}
                 />
               </div>
