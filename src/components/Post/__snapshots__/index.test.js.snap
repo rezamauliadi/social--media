@@ -1,0 +1,89 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Component: Post should match snapshot 1`] = `
+<div
+  style={
+    Object {
+      "opacity": "1",
+      "transition": "opacity 500ms linear",
+    }
+  }
+>
+  <Feed>
+    <FeedEvent>
+      <FeedLabel>
+        <Image
+          as="img"
+          src="/images/daniel.jpg"
+          ui={true}
+        />
+      </FeedLabel>
+      <FeedContent>
+        <FeedSummary>
+          <FeedUser
+            as={[Function]}
+            to="users/1/posts"
+          >
+            Leanne Graham
+          </FeedUser>
+           
+          posted!
+          <FeedDate>
+            1 day ago
+          </FeedDate>
+        </FeedSummary>
+        <FeedExtra
+          text={true}
+        >
+          <div>
+            <div
+              style={
+                Object {
+                  "fontStyle": "italic",
+                  "fontWeight": "bold",
+                }
+              }
+            >
+              foo
+            </div>
+            bar
+          </div>
+        </FeedExtra>
+      </FeedContent>
+    </FeedEvent>
+  </Feed>
+  <Button
+    as="button"
+    color="red"
+    disabled={false}
+    floated="right"
+    icon="trash"
+    loading={false}
+    onClick={[Function]}
+    size="tiny"
+    style={
+      Object {
+        "display": "block",
+      }
+    }
+  />
+  <Button
+    as="button"
+    color="yellow"
+    disabled={false}
+    floated="right"
+    icon="pencil"
+    onClick={[Function]}
+    size="tiny"
+    style={
+      Object {
+        "display": "block",
+      }
+    }
+  />
+  <CommentList
+    postId={1}
+  />
+  <Divider />
+</div>
+`;

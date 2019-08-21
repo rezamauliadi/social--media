@@ -1,0 +1,81 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Component: ModalPhoto should match snapshot when show photo is false 1`] = `
+<Modal
+  centered={true}
+  closeIcon={true}
+  closeOnDimmerClick={true}
+  closeOnDocumentClick={false}
+  dimmer={true}
+  eventPool="Modal"
+  onClose={[MockFunction]}
+  open={false}
+>
+  <ModalHeader>
+    Title: 
+    accusamus beatae ad facilis cum similique qui sunt
+  </ModalHeader>
+  <ModalContent>
+    <center>
+      <Image
+        as="img"
+        src="https://via.placeholder.com/600/92c952"
+        style={
+          Object {
+            "zIndex": "1001",
+          }
+        }
+        ui={true}
+      />
+    </center>
+  </ModalContent>
+  <ModalActions>
+    <Button
+      as="button"
+      content="Nice!"
+      onClick={[MockFunction]}
+      positive={true}
+    />
+  </ModalActions>
+</Modal>
+`;
+
+exports[`Component: ModalPhoto should match snapshot when show photo is true 1`] = `
+<Modal
+  centered={true}
+  closeIcon={true}
+  closeOnDimmerClick={true}
+  closeOnDocumentClick={false}
+  dimmer={true}
+  eventPool="Modal"
+  onClose={[MockFunction]}
+  open={true}
+>
+  <ModalHeader>
+    Title: 
+    accusamus beatae ad facilis cum similique qui sunt
+  </ModalHeader>
+  <ModalContent>
+    <center>
+      <Image
+        as="img"
+        src="https://via.placeholder.com/600/92c952"
+        style={
+          Object {
+            "zIndex": "1001",
+          }
+        }
+        ui={true}
+      />
+    </center>
+  </ModalContent>
+  <ModalActions>
+    <Button
+      as="button"
+      content="Nice!"
+      onClick={[MockFunction]}
+      positive={true}
+    />
+  </ModalActions>
+</Modal>
+`;

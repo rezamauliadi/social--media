@@ -1,0 +1,81 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Component: CommentItem should match snapshot 1`] = `
+<div
+  style={
+    Object {
+      "opacity": "1",
+      "transition": "opacity 500ms linear",
+    }
+  }
+>
+  <Comment>
+    <CommentAvatar
+      src="/images/stevie.jpg"
+      style={
+        Object {
+          "height": "35px",
+        }
+      }
+    />
+    <CommentContent>
+      <CommentAuthor
+        as="a"
+      >
+        <Label
+          size="small"
+        >
+          email@email.com
+        </Label>
+      </CommentAuthor>
+      <CommentMetadata>
+        <div>
+          1 day ago
+        </div>
+      </CommentMetadata>
+      <CommentText>
+        <div>
+          <div
+            style={
+              Object {
+                "fontStyle": "italic",
+                "fontWeight": "bold",
+              }
+            }
+          >
+            comment name
+          </div>
+          <div>
+            comment body
+          </div>
+        </div>
+        <div
+          style={
+            Object {
+              "display": "block",
+            }
+          }
+        >
+          <Button
+            as="button"
+            basic={true}
+            disabled={false}
+            icon="pencil"
+            onClick={[Function]}
+            size="tiny"
+          />
+          <Button
+            as="button"
+            basic={true}
+            disabled={false}
+            icon="trash"
+            loading={false}
+            onClick={[Function]}
+            size="tiny"
+          />
+        </div>
+      </CommentText>
+    </CommentContent>
+  </Comment>
+</div>
+`;

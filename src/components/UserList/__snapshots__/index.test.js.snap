@@ -1,0 +1,68 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Component: UserList should match snapshot 1`] = `
+<div>
+  <CardGroup>
+    <Card
+      as={[Function]}
+      key="1"
+      style={
+        Object {
+          "width": "198px",
+        }
+      }
+      to="/users/1/posts"
+    >
+      <Image
+        as="img"
+        src="/images/daniel.jpg"
+        ui={false}
+        wrapped={true}
+      />
+      <CardContent>
+        <CardHeader>
+          Leanne Graham
+        </CardHeader>
+        <CardMeta>
+          <span>
+            Bret
+          </span>
+        </CardMeta>
+        <CardDescription>
+          Multi-layered client-server neural-net
+        </CardDescription>
+      </CardContent>
+    </Card>
+    <Card
+      as={[Function]}
+      key="2"
+      style={
+        Object {
+          "width": "198px",
+        }
+      }
+      to="/users/2/posts"
+    >
+      <Image
+        as="img"
+        src="/images/jenny.jpg"
+        ui={false}
+        wrapped={true}
+      />
+      <CardContent>
+        <CardHeader>
+          Ervin Howell
+        </CardHeader>
+        <CardMeta>
+          <span>
+            Antonette
+          </span>
+        </CardMeta>
+        <CardDescription>
+          Proactive didactic contingency
+        </CardDescription>
+      </CardContent>
+    </Card>
+  </CardGroup>
+</div>
+`;

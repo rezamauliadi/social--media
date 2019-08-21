@@ -1,0 +1,152 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Component: CommentList renderComments should match snapshot if has comments 1`] = `
+<div>
+  <Button
+    as="button"
+    onClick={[Function]}
+    size="mini"
+    style={
+      Object {
+        "marginLeft": "50px",
+      }
+    }
+  >
+    Show Comments
+  </Button>
+  <CommentGroup
+    style={
+      Object {
+        "marginLeft": "60px",
+      }
+    }
+  >
+    <div>
+      <CommentItem
+        comment={
+          Object {
+            "body": "laudantium ",
+            "email": "Eliseo@gardner.biz",
+            "id": 1,
+            "name": "id labore",
+            "postId": 1,
+          }
+        }
+        key="1-1"
+        onDeleteComment={[Function]}
+        onUpdateComment={[Function]}
+      />
+      <CommentItem
+        comment={
+          Object {
+            "body": "est natus enim nihil est ",
+            "email": "Jayne_Kuhic@sydney.com",
+            "id": 2,
+            "name": "quo vero ",
+            "postId": 1,
+          }
+        }
+        key="1-2"
+        onDeleteComment={[Function]}
+        onUpdateComment={[Function]}
+      />
+      <CommentItem
+        comment={
+          Object {
+            "body": "quia molestiae reprehenderit ",
+            "email": "Nikita@garfield.biz",
+            "id": 3,
+            "name": "odio adipisci",
+            "postId": 1,
+          }
+        }
+        key="1-3"
+        onDeleteComment={[Function]}
+        onUpdateComment={[Function]}
+      />
+      <div
+        style={
+          Object {
+            "marginTop": "18px",
+          }
+        }
+      >
+        <CreateForm
+          onSubmit={[Function]}
+          type="comments"
+        />
+      </div>
+    </div>
+  </CommentGroup>
+</div>
+`;
+
+exports[`Component: CommentList renderComments should match snapshot if has no comments and has fetch comment 1`] = `
+<div>
+  <Button
+    as="button"
+    onClick={[Function]}
+    size="mini"
+    style={
+      Object {
+        "marginLeft": "50px",
+      }
+    }
+  >
+    Show Comments
+  </Button>
+  <CommentGroup
+    style={
+      Object {
+        "marginLeft": "60px",
+      }
+    }
+  >
+    <div>
+      <Label
+        basic={true}
+      >
+        No comment yet...
+      </Label>
+      <div
+        style={
+          Object {
+            "marginTop": "18px",
+          }
+        }
+      >
+        <CreateForm
+          onSubmit={[Function]}
+          type="comments"
+        />
+      </div>
+    </div>
+  </CommentGroup>
+</div>
+`;
+
+exports[`Component: CommentList should match snapshot 1`] = `
+<div>
+  <Button
+    as="button"
+    onClick={[Function]}
+    size="mini"
+    style={
+      Object {
+        "marginLeft": "50px",
+      }
+    }
+  >
+    Show Comments
+  </Button>
+  <CommentGroup
+    style={
+      Object {
+        "marginLeft": "60px",
+      }
+    }
+  >
+    <div />
+  </CommentGroup>
+</div>
+`;

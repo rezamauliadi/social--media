@@ -1,0 +1,133 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Component: MenuBar should match snapshot with active home 1`] = `
+<div>
+  <Container
+    text={true}
+  >
+    <Menu
+      secondary={true}
+      style={
+        Object {
+          "marginTop": "1rem",
+        }
+      }
+    >
+      <MenuItem
+        active={true}
+        as={[Function]}
+        key="0"
+        name="Home"
+        style={
+          Object {
+            "marginTop": "6px",
+          }
+        }
+        to="/"
+      />
+      <MenuItem
+        active={false}
+        as={[Function]}
+        key="1"
+        name="Friends"
+        style={
+          Object {
+            "marginTop": "6px",
+          }
+        }
+        to="/users"
+      />
+      <MenuMenu
+        position="right"
+      >
+        <MenuItem>
+          <Header
+            as="h4"
+          >
+            <Image
+              as="img"
+              avatar={true}
+              src="/images/joe.jpg"
+              ui={true}
+            />
+            Hi! You
+          </Header>
+        </MenuItem>
+      </MenuMenu>
+    </Menu>
+  </Container>
+  <Divider
+    style={
+      Object {
+        "marginBottom": "0",
+      }
+    }
+  />
+</div>
+`;
+
+exports[`Component: MenuBar should match snapshot with active users 1`] = `
+<div>
+  <Container
+    text={true}
+  >
+    <Menu
+      secondary={true}
+      style={
+        Object {
+          "marginTop": "1rem",
+        }
+      }
+    >
+      <MenuItem
+        active={false}
+        as={[Function]}
+        key="0"
+        name="Home"
+        style={
+          Object {
+            "marginTop": "6px",
+          }
+        }
+        to="/"
+      />
+      <MenuItem
+        active={true}
+        as={[Function]}
+        key="1"
+        name="Friends"
+        style={
+          Object {
+            "marginTop": "6px",
+          }
+        }
+        to="/users"
+      />
+      <MenuMenu
+        position="right"
+      >
+        <MenuItem>
+          <Header
+            as="h4"
+          >
+            <Image
+              as="img"
+              avatar={true}
+              src="/images/joe.jpg"
+              ui={true}
+            />
+            Hi! You
+          </Header>
+        </MenuItem>
+      </MenuMenu>
+    </Menu>
+  </Container>
+  <Divider
+    style={
+      Object {
+        "marginBottom": "0",
+      }
+    }
+  />
+</div>
+`;

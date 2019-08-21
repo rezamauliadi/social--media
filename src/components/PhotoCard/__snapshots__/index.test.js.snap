@@ -1,0 +1,147 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Component: PhotoCard should match snapshot when showing albums 1`] = `
+<div>
+  <CardGroup
+    itemsPerRow={3}
+  >
+    <Card
+      as={[Function]}
+      color="blue"
+      key="1"
+    >
+      <Image
+        as="img"
+        style={
+          Object {
+            "height": "173px",
+            "width": "172px",
+          }
+        }
+        ui={false}
+        wrapped={true}
+      />
+      <CardContent>
+        <CardHeader
+          style={
+            Object {
+              "overflow": "hidden",
+              "textOverflow": "ellipsis",
+              "whiteSpace": "nowrap",
+              "width": "140px",
+            }
+          }
+        >
+          quidem molestiae enim
+        </CardHeader>
+      </CardContent>
+    </Card>
+    <Card
+      as={[Function]}
+      color="blue"
+      key="11"
+    >
+      <Image
+        as="img"
+        style={
+          Object {
+            "height": "173px",
+            "width": "172px",
+          }
+        }
+        ui={false}
+        wrapped={true}
+      />
+      <CardContent>
+        <CardHeader
+          style={
+            Object {
+              "overflow": "hidden",
+              "textOverflow": "ellipsis",
+              "whiteSpace": "nowrap",
+              "width": "140px",
+            }
+          }
+        >
+          quidem molestiae enim
+        </CardHeader>
+      </CardContent>
+    </Card>
+  </CardGroup>
+</div>
+`;
+
+exports[`Component: PhotoCard should match snapshot when showing photos 1`] = `
+<div>
+  <CardGroup
+    itemsPerRow={3}
+  >
+    <Card
+      as="a"
+      color="blue"
+      key="1"
+      onClick={[Function]}
+    >
+      <Image
+        as="img"
+        src="https://via.placeholder.com/150/92c952"
+        style={
+          Object {
+            "height": "173px",
+            "width": "172px",
+          }
+        }
+        ui={false}
+        wrapped={true}
+      />
+      <CardContent>
+        <CardHeader
+          style={
+            Object {
+              "overflow": "hidden",
+              "textOverflow": "ellipsis",
+              "whiteSpace": "nowrap",
+              "width": "140px",
+            }
+          }
+        >
+          accusamus beatae ad facilis cum similique qui sunt
+        </CardHeader>
+      </CardContent>
+    </Card>
+    <Card
+      as="a"
+      color="blue"
+      key="51"
+      onClick={[Function]}
+    >
+      <Image
+        as="img"
+        src="https://via.placeholder.com/150/8e973b"
+        style={
+          Object {
+            "height": "173px",
+            "width": "172px",
+          }
+        }
+        ui={false}
+        wrapped={true}
+      />
+      <CardContent>
+        <CardHeader
+          style={
+            Object {
+              "overflow": "hidden",
+              "textOverflow": "ellipsis",
+              "whiteSpace": "nowrap",
+              "width": "140px",
+            }
+          }
+        >
+          non sunt voluptatem placeat consequuntur rem incidunt
+        </CardHeader>
+      </CardContent>
+    </Card>
+  </CardGroup>
+</div>
+`;

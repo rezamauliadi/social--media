@@ -1,0 +1,44 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Component: CreateForm should match snapshot 1`] = `
+<Form
+  as="form"
+  warning={false}
+>
+  <FormTextArea
+    as={[Function]}
+    control={[Function]}
+    name="body"
+    onChange={[Function]}
+    placeholder="Write your post!"
+    style={
+      Object {
+        "marginBottom": "-8px",
+      }
+    }
+    value=""
+  />
+  <FormInput
+    as={[Function]}
+    control={[Function]}
+    name="title"
+    onChange={[Function]}
+    placeholder="Give it a title!"
+    value=""
+  />
+  <Message
+    warning={true}
+  >
+    It will be great if you put some words in the post and give it a cool title.
+  </Message>
+  <Button
+    as="button"
+    content="Post It!"
+    icon="send"
+    labelPosition="left"
+    loading={false}
+    onClick={[Function]}
+    primary={true}
+  />
+</Form>
+`;
