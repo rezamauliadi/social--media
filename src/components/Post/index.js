@@ -70,7 +70,7 @@ class Post extends Component {
     const status = await API.deletePost(id);
 
     if (status === 200) {
-      this.setState({ opacity: "0", deletePost: false });
+      this.setState({ opacity: "0", deletingPost: false });
       setTimeout(() => {
         this.props.onDeletePost(id);
       }, 500);
@@ -87,6 +87,26 @@ class Post extends Component {
     const comments = [...this.state.comments];
     comments.push(newComment);
     this.setState({ comments });
+  };
+
+  updateComment = updatedComment => {
+    const { comments } = this.state;
+    const commentIndex = comments.findIndex(
+      comment => comment.id === updatedComment.id
+    );
+    const newCommenttList = [...comments];
+    newCommenttList.splice(commentIndex, 1, updatedComment);
+    this.setState({ comments: newCommenttList });
+  };
+
+  removeComment = commentId => {
+    const { comments } = this.state;
+    const commentIndex = comments.findIndex(
+      comment => comment.id === commentId
+    );
+    const newCommenttList = [...comments];
+    newCommenttList.splice(commentIndex, 1);
+    this.setState({ comments: newCommenttList });
   };
 
   toggleComments = async () => {
@@ -142,7 +162,12 @@ class Post extends Component {
   commentList = () => {
     const { comments, id } = this.state;
     return comments.map(comment => (
-      <PostComment comment={comment} key={`${id}-${comment.id}`} />
+      <PostComment
+        comment={comment}
+        key={`${id}-${comment.id}`}
+        onUpdateComment={this.updateComment}
+        onDeleteComment={this.removeComment}
+      />
     ));
   };
 
@@ -252,7 +277,7 @@ class Post extends Component {
   }
 
   render() {
-    const { deletingPost, updatingPost, opacity } = this.state;
+    const { deletingPost, updatingPost, opacity, showUpdateForm } = this.state;
     const { user } = this.props;
 
     return (
@@ -289,6 +314,7 @@ class Post extends Component {
           loading={deletingPost}
           disabled={deletingPost || updatingPost}
           onClick={() => this.deletePost()}
+          style={{ display: showUpdateForm ? "none" : "block" }}
         />
         <Button
           size="tiny"
@@ -298,6 +324,7 @@ class Post extends Component {
           loading={updatingPost}
           disabled={deletingPost || updatingPost}
           onClick={() => this.toggleUpdateForm(true)}
+          style={{ display: showUpdateForm ? "none" : "block" }}
         />
 
         <Comment.Group style={{ marginLeft: "60px" }}>

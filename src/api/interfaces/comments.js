@@ -37,8 +37,7 @@ const API = {
   async deleteComment(commentId) {
     const options = { method: "DELETE" };
     const response = await fetch(`${URL}/${commentId}`, options);
-    const data = await response.json();
-    return data;
+    return response.status;
   }
 };
 
