@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import { Button, Comment, Form, Label, Message } from "semantic-ui-react";
+import { Button, Comment, Label } from "semantic-ui-react";
 import UpdateForm from "src/components/UpdateForm";
 
 import API from "src/api";
