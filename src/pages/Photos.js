@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 
 import { Button, Dimmer, Header, Icon, Loader } from "semantic-ui-react";
 import PhotoCard from "src/components/PhotoCard";
+import ModalPhoto from "src/components/ModalPhoto";
 
 import API from "src/api";
 
@@ -10,7 +11,9 @@ class Photos extends Component {
   state = {
     album: {},
     photos: [],
-    loading: true
+    photo: {},
+    loading: true,
+    showPhoto: false
   };
 
   getAlbum = async albumId => {
@@ -23,8 +26,17 @@ class Photos extends Component {
     this.setState({ photos });
   };
 
+  openPhoto = async id => {
+    const photo = await API.retrievePhoto(id);
+    this.setState({ showPhoto: true, photo });
+  };
+
+  closePhoto = () => {
+    this.setState({ showPhoto: false });
+  };
+
   renderAlbumPhotos = () => {
-    const { loading, album, photos } = this.state;
+    const { loading, album, photos, showPhoto, photo } = this.state;
 
     if (loading) {
       return (
@@ -49,8 +61,13 @@ class Photos extends Component {
         </Header>
 
         <div style={{ padding: "12px 24px" }}>
-          <PhotoCard items={photos} />
+          <PhotoCard items={photos} onPhotoClick={this.openPhoto} />
         </div>
+        <ModalPhoto
+          showPhoto={showPhoto}
+          photo={photo}
+          onModalClose={this.closePhoto}
+        />
       </div>
     );
   };

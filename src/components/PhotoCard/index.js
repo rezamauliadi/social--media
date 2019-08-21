@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { Card, Image } from "semantic-ui-react";
 
-const PhotoCard = ({ items, isAlbum }) => {
+const PhotoCard = ({ items, isAlbum, onPhotoClick }) => {
   const cardTitleStyle = {
     width: "140px",
     whiteSpace: "nowrap",
@@ -23,7 +23,12 @@ const PhotoCard = ({ items, isAlbum }) => {
     <div>
       <Card.Group itemsPerRow={3}>
         {items.map(item => (
-          <Card {...cardProps(item)} key={item.id} color="blue">
+          <Card
+            as="a"
+            key={item.id}
+            color="blue"
+            onClick={() => onPhotoClick(item.id)}
+          >
             <Image
               style={{ height: "173px", width: "172px" }}
               src={item.thumbnailUrl}
